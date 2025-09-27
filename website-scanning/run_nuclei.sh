@@ -105,7 +105,7 @@ then
         nuclei -H "$user_agent" -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -s "${severity[@]}" -l "$FILE" -o "$OUTPUTFILE"
     elif [[ -z "$USER_AGENTS_FILE" && -z "$OUTPUTFILE" ]]
     then
-        ecgo "[*] Running with tags and severity, but with no user agent supplied and no output file to write results to."
+        echo "[*] Running with tags and severity, but with no user agent supplied and no output file to write results to."
         nuclei -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -s "${severity[@]}" -l "$FILE"
     else # This might be a point of failure
         echo "[*] Running with tags and severity and user agent supplied, but no output file to write results to."
