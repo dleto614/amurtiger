@@ -65,6 +65,8 @@ echo "[*] Checking arguments..."
 
 if [[ -z "$pcap_file" ]]
 then
+    echo "[!] Error: You must specify pcap file to extract hashes form..."
+    echo ""
     exit_error
     exit 1
 fi
