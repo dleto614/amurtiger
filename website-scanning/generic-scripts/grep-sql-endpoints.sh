@@ -52,8 +52,14 @@ then
 fi
 
 # Now grep for the endpoints
+echo "[*] Extracting parameterized endpoints for SQLi..."
 
-output=$(cat "$FILE" | grep -Eo 'https?://[^?]*\\?[^=]+=[^&]*$')
+# Extract any URL that contains a protocol, a path, a literal '?', and parameters
+# https?://     = matches http:// or https://
+# [^ ]*        = matches the domain/path up to a space
+# \?           = matches the literal '?' (start of params)
+# [^ ]*        = matches the parameters (id=1&name=bob) until the next space/newline
+output=$(cat "$FILE" | grep -Eo 'https?://[^ ]*\?[^ ]*')
 
 if [[ -n "$OUTPUTFILE" ]]
 then

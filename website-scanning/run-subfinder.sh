@@ -16,7 +16,7 @@ exit_error() { # Function: Exit with error.
   exit 1
 }
 
- while getopts "f:n:p:o:h" opt
+ while getopts "f:n:o:h" opt
  do
 	 case ${opt} in
 		f)
@@ -52,8 +52,9 @@ then
 fi
 
 # Now run subfinder
-output=$(cat "$FILE" | subfinder -all -silent | sort -u)
+output=$(cat "$FILE" | subfinder -all -silent -nc | sort -u)
 
 # Now remove bad domains that we don't want to scan or crawl
 # Probably incomplete, but whatever...
-echo "$output" | grep -Ev "innovationcast|blastheadrecords|cloudflare|quorum|pantheonsite|google|wix|wordpress|microsoft|incapsula|bluehost|certus|twitter|facebook|bit.ly|bitly|x.com|amazon|yahoo|youtube|^$" | tee -a "$OUTPUTFILE"
+# Now remove bad domains that we don't want to scan or crawl
+echo "$output" | grep -Ev "innovationcast|blastheadrecords|cloudflare\.com|quorum|pantheonsite\.io|google\.com|wix\.com|wordpress\.com|microsoft\.com|incapsula\.com|bluehost\.com|certus|twitter\.com|facebook\.com|bit\.ly|x\.com|amazon\.com|yahoo\.com|youtube\.com|^$" | tee -a "$OUTPUTFILE"

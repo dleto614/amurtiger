@@ -102,14 +102,14 @@ then
     if [[ -n "$OUTPUTFILE" && -n "$USER_AGENTS_FILE" ]]
     then
         echo "[*] Running with tags, severity and user agent supplied, but with output file supplied to write results to."
-        nuclei -H "$user_agent" -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -s "${severity[@]}" -l "$FILE" -o "$OUTPUTFILE"
+        nuclei -H "$user_agent" -ni -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -s "${severity[@]}" -l "$FILE" -o "$OUTPUTFILE"
     elif [[ -z "$USER_AGENTS_FILE" && -z "$OUTPUTFILE" ]]
     then
         echo "[*] Running with tags and severity, but with no user agent supplied and no output file to write results to."
-        nuclei -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -s "${severity[@]}" -l "$FILE"
+        nuclei -nmhe -ni -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -s "${severity[@]}" -l "$FILE"
     else # This might be a point of failure
         echo "[*] Running with tags and severity and user agent supplied, but no output file to write results to."
-        nuclei -H "$user_agent" -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -s "${severity[@]}" -l "$FILE"
+        nuclei -H "$user_agent" -nmhe -ni -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -s "${severity[@]}" -l "$FILE"
     fi
 # If only TAGS were inputted:
 elif [[ -n "$TAGS" ]]
@@ -121,14 +121,14 @@ then
     if [[ -n "$OUTPUTFILE" && -n "$USER_AGENTS_FILE" ]]
     then
         echo "[*] Running with tags and user agent supplied, but with output file supplied to write results to."
-        nuclei -H "$user_agent" -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -l "$FILE" -o "$OUTPUTFILE"  
+        nuclei -H "$user_agent" -nmhe -ni -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -l "$FILE" -o "$OUTPUTFILE"  
     elif [[ -z "$USER_AGENTS_FILE" && -z "$OUTPUTFILE" ]]
     then
         echo "[*] Running with tags, but no user agent supplied and no output file supplied to write results to."
-        nuclei -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -l "$FILE"
+        nuclei -nmhe -ni -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -l "$FILE"
     else
         echo "[*] Running with tags and user agent supplied, but no output file supplied to write results to."
-        nuclei -H "$user_agent" -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -l "$FILE"
+        nuclei -H "$user_agent" -nmhe -ni -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -tags "${tags[@]}" -l "$FILE"
     fi
 # If only SEVERITY were inputted:
 elif [[ -n "$SEVERITY" && -n "$USER_AGENTS_FILE" ]]
@@ -140,23 +140,23 @@ then
     if [[ -n "$OUTPUTFILE" && -n "$USER_AGENTS_FILE" ]]
     then
         echo "[*] Running with severity and user agent supplied, but with output file supplied to write results to."
-        nuclei -H "$user_agent" -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -s "${severity[@]}" -l "$FILE" -o "$OUTPUTFILE"
+        nuclei -H "$user_agent" -nmhe -ni -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -s "${severity[@]}" -l "$FILE" -o "$OUTPUTFILE"
     elif [[ -z "$USER_AGENTS_FILE" && -z "$OUTPUTFILE" ]]
     then
         echo "[*] Running with severity, but with no user agent supplied and no output file to write results to."
-        nuclei -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -s "${severity[@]}" -l "$FILE"
+        nuclei -nmhe -ni -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -s "${severity[@]}" -l "$FILE"
     else # This might be a point of failure
         echo "[*] Running with severity and user agent supplied, but no output file to write results to."
-        nuclei -H "$user_agent" -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -s "${severity[@]}" -l "$FILE"
+        nuclei -H "$user_agent" -ni -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -s "${severity[@]}" -l "$FILE"
     fi
 else
     if [[ -n "$OUTPUTFILE" && -n "$USER_AGENTS_FILE" ]]
     then
-        nuclei -H "$user_agent" -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -l "$FILE" -o "$OUTPUTFILE"
+        nuclei -H "$user_agent" -nmhe -ni -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -l "$FILE" -o "$OUTPUTFILE"
     elif [[ -z "$USER_AGENTS_FILE" && -z "$OUTPUTFILE" ]]
     then
-        nuclei -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -l "$FILE"
+        nuclei -nmhe -ni -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -l "$FILE"
     else
-        nuclei -H "$user_agent" -nmhe -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -l "$FILE"
+        nuclei -H "$user_agent" -nmhe -ni -nh -c 5 -bs 3 -rl 15 -timeout 30 -ss host-spray -l "$FILE"
     fi
 fi
