@@ -45,6 +45,7 @@ exit_error() { # Exit with error.
 
 # Log a status message or error to the log file or stderr.
 log() {
+
     if [[ -n "$LOGFILE" ]]
     then
         printf '%s\n' "$1" >> "$LOGFILE"
@@ -264,19 +265,29 @@ then
     # Ensure single domain target has a valid scheme.
     if [[ "$target" != http://* && "$target" != https://* ]]
     then
+        echo "[!] An error occured with the scheme."
+        echo "[*] If log specified, Check the logfile for the error message."
         log "[!] Error: Target '$DOMAIN' is a bare domain or missing a valid scheme (http:// or https://)."
-        exit_error
+        exit 1
     fi
 
     if [[ -n "$target" ]]
     then
         run_gobuster "$target" # Single target mode skips the done-file check on purpose.
     else
+        echo "[!] An error occured with specifying the domain."
+        echo "[*] If log specified, Check the logfile for the error message."
         log "[!] Error: Target domain cannot be empty."
+        echo ""
+        echo "---------------------------------------------------"
         exit_error
     fi
 else
+    echo "[!] An error occured with incorrect arguments either being inputted or not at all."
+    echo "[*] If log specified, Check the logfile for the error message."
     log "[!] Error: You must specify a domain (-d) or an input file (-i)."
+    echo ""
+    echo "---------------------------------------------------"
     exit_error
 fi
 
