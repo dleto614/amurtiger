@@ -1,5 +1,10 @@
-// rootdomains — extract registrable domains (eTLD+1) from hakrevdns output.
-// stdin or file arg; accepts "IP\thost" lines or bare domains.
+/*
+This tool is to be used to help reduce number of domain lookups for subfinder.
+Take a list of domains found by tools like hakrevdns, extract root domains,
+run that list of root domains in subfinder.
+
+It is inefficient to take a list of like 10k domains and feed em directly into subfinder as is...
+*/
 package main
 
 import (
@@ -25,8 +30,8 @@ const (
 	timeout = 10 * time.Second
 )
 
-// ---------- public suffix list ----------
-
+// Public suffix rules or whatever.
+// This is what we use to parse the root domains.
 type psl struct{ rules, exceptions map[string]struct{} }
 
 func parsePSL(data []byte, keepPrivate bool) *psl {
@@ -62,7 +67,7 @@ func parsePSL(data []byte, keepPrivate bool) *psl {
 // publicSuffix implements the publicsuffix.org algorithm, returns how many
 // rightmost labels form the public suffix.
 func (l *psl) publicSuffix(labels []string) int {
-	// 1. exception rules prevail: "!www.ck" -> suffix of a.www.ck is "ck"
+	// exception rules prevail: "!www.ck" -> suffix of a.www.ck is "ck"
 	for i := range labels {
 		if _, ok := l.exceptions[strings.Join(labels[i:], ".")]; ok {
 			if n := len(labels) - i - 1; n > 0 {
@@ -71,7 +76,7 @@ func (l *psl) publicSuffix(labels []string) int {
 			return 1
 		}
 	}
-	// 2. longest matching rule, wildcards included ("*.ck" matches x.ck)
+	// longest matching rule, wildcards included ("*.ck" matches x.ck)
 	for i := range labels {
 		if _, ok := l.rules[strings.Join(labels[i:], ".")]; ok {
 			return len(labels) - i
@@ -82,7 +87,7 @@ func (l *psl) publicSuffix(labels []string) int {
 			}
 		}
 	}
-	return 1 // 3. default rule "*": unknown TLD -> last two labels
+	return 1 // default rule "*": unknown TLD -> last two labels
 }
 
 func (l *psl) registrable(host string) (string, bool) {
@@ -93,8 +98,6 @@ func (l *psl) registrable(host string) (string, bool) {
 	}
 	return strings.Join(labels[len(labels)-k-1:], "."), true
 }
-
-// ---------- cache + fetch ----------
 
 func cachePath() string {
 	if base, err := os.UserCacheDir(); err == nil {
@@ -125,6 +128,7 @@ func loadPSL(keepPrivate bool) *psl {
 	return parsePSL(data, keepPrivate)
 }
 
+// Fetch... rubart.
 func fetch(path string) error {
 	resp, err := (&http.Client{Timeout: timeout}).Get(pslURL)
 	if err != nil {
@@ -148,8 +152,7 @@ func fetch(path string) error {
 	return os.Rename(tmp, path)
 }
 
-// ---------- helper functions ----------
-
+// Helper functions.
 func setupInput(inputFile *string) *os.File {
 	if *inputFile == "" {
 		return os.Stdin
@@ -174,10 +177,8 @@ func setupOutput(outputFile *string) *os.File {
 	return fd
 }
 
-// ---------- main ----------
-
 func main() {
-	noPrivate := flag.Bool("no-private", false, "Collapse private suffixes (github.io, herokuapp.com, ...) into one root")
+	noPrivate := flag.Bool("no-private", false, "Collapse private suffixes (github.io, herokuapp.com, ...) into one root") // Might get rid of this later because I don't really use it. I thought I would.
 	inputFile := flag.String("i", "", "Input file path (default stdin)")
 	outputFile := flag.String("o", "", "Output file path (default stdout)")
 
@@ -227,6 +228,12 @@ func main() {
 			seen[root] = struct{}{}
 			roots = append(roots, root)
 		}
+	}
+
+	// Check for errors after the loop
+	// This is best practices apparently...
+	if err := sc.Err(); err != nil {
+		log.Fatal("Error: ", err)
 	}
 
 	sort.Strings(roots)
