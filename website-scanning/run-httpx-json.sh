@@ -49,5 +49,3 @@ fi
 
 echo "[*] Dumping all tech to JSON..."
 httpx -silent -json -td -l "$FILE" -o "$OUTPUTFILE"
-
-echo "[*] Dump complete. Run analyze-tech.sh to see the results."
