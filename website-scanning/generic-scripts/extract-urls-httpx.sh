@@ -5,7 +5,7 @@ OUTPUT_FILE=""
 
 usage() {
   echo "Usage: $0 [ -f HTTPX JSON FILE ]
-        [ -o OUTPUT FILE TO SAVE TLSX RESULTS ]
+        [ -o OUTPUT FILE TO SAVE RESULTS ]
         [ -h HELP ]" 1>&2
 }
 
