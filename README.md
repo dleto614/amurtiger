@@ -10,7 +10,8 @@ I'm quite proud since this started as a very rough folder full of scripts that I
 I plan on adding more scripts in the future and probably what I will try to do is write a README for each folder since there
 is just too many things to include in a single README on the main page.
 
-I also plan on adding ascii art to scripts as I can, but please ignore the boring looking scripts.
+I also plan on adding ascii art to scripts as I can, but please ignore how boring looking these scripts look for the most part.
+I rarely care about adding pretty colors and stuff...
 
 I am aware some of these scripts look rough, but will try to overtime to either make them cleaner or delete them, but this was
 largely for myself to keep my scripts somewhere else besides my harddrive in hopes that it may one day help one other person
