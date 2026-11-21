@@ -2,6 +2,23 @@
   <img src="Images/amur-snow-cute.jpg" alt="Amur Laying in Snow" width="400">
 </p>
 
+### NOTICE: 
+
+I've put redoing the README onto my lists of things todo since this has grown past what it originally was.
+
+I'm quite proud since this started as a very rough folder full of scripts that I was writing to help with automation.
+I plan on adding more scripts in the future and probably what I will try to do is write a README for each folder since there
+is just too many things to include in a single README on the main page.
+
+I also plan on adding ascii art to scripts as I can, but please ignore the boring looking scripts.
+
+I am aware some of these scripts look rough, but will try to overtime to either make them cleaner or delete them, but this was
+largely for myself to keep my scripts somewhere else besides my harddrive in hopes that it may one day help one other person
+since mass scanning/sniffing/whatever is difficult thing to accomplish, not because of the scanning or sniffing part and anything else
+can produce a lot of data that needs to be filtered, handled, etc in order to produce only the results that are useful.
+
+More difficult than it looks and I think as of this writing, I think I'm starting to grasp this much better than my earlier work and I'm
+proud of what I have been able to accomplish since my scripts work and work well.
 
 # Amur Tiger: A collection of scripts to automate scanning and various other tasks
 
@@ -200,7 +217,7 @@ Usage: ./extract-ntlm.sh [ -f PCAP FILE TO EXTRACT HASHES FROM ]
 Usage of `extract-snmpv3.py`:
 
 ```bash
- $ ./extract-snmpv3.py -h
+$ ./extract-snmpv3.py -h
 
 ... ASCII art doesn't want to look right in this README. :(((
     
@@ -226,6 +243,7 @@ whatever you use for virtualenv. This was written in python because I couldn't g
 
 - Add the script that handles mysql both sha1 and sha2. (This required a different strategy because the password is hashed twice before XOR and hash2 is stored on the server so had to do something differently based on the information I had access to)
 - Port over `extract-padata.py` to Golang if possible. (I don't see why not, but Golang doesn't have everything ported over yet or there aren't mature libraries). I much prefer Go since it is compiled and I wouldn't have to deal with virtual environments as much.
+- Whatever else I write and decide to add to this...
 
 ----
 
