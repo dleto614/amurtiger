@@ -47,7 +47,11 @@ then
     exit 1
 fi
 
-echo "[*] Extracting unique urls from $INPUT_FILE..."
+# Only print this when the output file is not empty.
+if [[ -n "$OUTPUT_FILE" ]]
+then
+    echo "[*] Extracting unique urls from $INPUT_FILE..."
+fi
 
 # Take input file and extract urls and sort for only unique ones...
 results=$(jq -r '.url // empty' "$INPUT_FILE" | sort -u)
@@ -66,5 +70,9 @@ else
 
 fi
 
-echo "[*] Extraction complete. Got "$COUNT" urls from httpx file "$INPUT_FILE""
-echo "[*] Done extracting urls from "$INPUT_FILE""
+# Only print this when the output file is not empty.
+if [[ -n "$OUTPUT_FILE" ]]
+then
+    echo "[*] Extraction complete. Got "$COUNT" urls from httpx file "$INPUT_FILE""
+    echo "[*] Done extracting urls from "$INPUT_FILE""
+fi
