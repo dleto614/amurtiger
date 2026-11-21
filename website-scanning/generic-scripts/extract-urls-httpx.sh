@@ -49,18 +49,20 @@ fi
 
 echo "[*] Extracting unique urls from $INPUT_FILE..."
 
-# Take input file and extract unique ips than feed it into tlsx.
-results=$(jq -r '.url' "$INPUT_FILE" | sort -u)
+# Take input file and extract urls and sort for only unique ones...
+results=$(jq -r '.url // empty' "$INPUT_FILE" | sort -u)
 
-COUNT=$(echo "$results" | wc -l) # Don't likey this as is right now...
+# Handles the silly echo edge case where it always prints a newline regardless... even empty.
+# Should remember this for other scripts... going to be a hard habit to break.
+COUNT=$(printf '%s\n' "$results" | grep -c .) 
 
 # Check if output file was passed as an argument.
 if [[ -n "$OUTPUT_FILE" ]]
 then
-    echo "$results" >> "$OUTPUT_FILE"
+    printf '%s\n' "$results" > "$OUTPUT_FILE"
     echo "[*] Saved to "$OUTPUT_FILE""
 else
-    echo "$results"
+    printf '%s\n' "$results"
 
 fi
 
