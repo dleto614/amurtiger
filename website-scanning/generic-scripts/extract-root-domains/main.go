@@ -153,28 +153,39 @@ func fetch(path string) error {
 }
 
 // Helper functions.
-func setupInput(inputFile *string) *os.File {
-	if *inputFile == "" {
-		return os.Stdin
-	}
-
-	fd, err := os.Open(*inputFile)
+func hasStdinInput() bool {
+	info, err := os.Stdin.Stat()
 	if err != nil {
-		log.Fatal("[!] Error opening input file:", err)
+		return false
 	}
-	return fd
+	return (info.Mode() & os.ModeCharDevice) == 0
 }
 
-func setupOutput(outputFile *string) *os.File {
-	if *outputFile == "" {
-		return os.Stdout
+func setupInput(inputFile string) (*os.File, error) {
+	if inputFile == "" {
+		if !hasStdinInput() {
+			return nil, fmt.Errorf("No input file given and no stdin input provided")
+		}
+		return os.Stdin, nil
 	}
 
-	fd, err := os.OpenFile(*outputFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+	fd, err := os.Open(inputFile)
 	if err != nil {
-		log.Fatal("[!] Error opening output file:", err)
+		return nil, fmt.Errorf("Opening input file: %w", err)
 	}
-	return fd
+	return fd, nil
+}
+
+func setupOutput(outputFile string) (*os.File, error) {
+	if outputFile == "" {
+		return os.Stdout, nil
+	}
+
+	fd, err := os.OpenFile(outputFile, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+	if err != nil {
+		return nil, fmt.Errorf("Opening output file: %w", err)
+	}
+	return fd, nil
 }
 
 func main() {
@@ -184,17 +195,26 @@ func main() {
 
 	flag.Parse()
 
-	l := loadPSL(!*noPrivate)
+	input, err := setupInput(*inputFile)
+	if err != nil {
+		log.Println("[!] Error:", err)
+		flag.Usage()
+		os.Exit(1)
+	}
 
-	input := setupInput(inputFile)
-	if input != os.Stdin {
+	if *inputFile != "" {
 		defer input.Close()
 	}
 
-	output := setupOutput(outputFile)
-	if output != os.Stdout {
+	output, err := setupOutput(*outputFile)
+	if err != nil {
+		log.Fatal("[!] Error:", err)
+	}
+	if *outputFile != "" {
 		defer output.Close()
 	}
+
+	l := loadPSL(!*noPrivate)
 
 	sc := bufio.NewScanner(input)
 	sc.Buffer(make([]byte, 0, 64*1024), 1<<20)
